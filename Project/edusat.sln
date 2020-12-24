@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "edusat", "edusat\edusat.vcxproj", "{7CBC0538-ADF2-4F46-902F-A30703F37191}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "formula", "formula\formula.vcxproj", "{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -27,6 +29,18 @@ Global
 		{7CBC0538-ADF2-4F46-902F-A30703F37191}.ReleaseWithAssert|x64.Build.0 = Release|Win32
 		{7CBC0538-ADF2-4F46-902F-A30703F37191}.ReleaseWithAssert|x86.ActiveCfg = Release|Win32
 		{7CBC0538-ADF2-4F46-902F-A30703F37191}.ReleaseWithAssert|x86.Build.0 = Release|Win32
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.Debug|x64.ActiveCfg = Debug|x64
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.Debug|x64.Build.0 = Debug|x64
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.Debug|x86.ActiveCfg = Debug|Win32
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.Debug|x86.Build.0 = Debug|Win32
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.Release|x64.ActiveCfg = Release|Win32
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.Release|x64.Build.0 = Release|Win32
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.Release|x86.ActiveCfg = Release|Win32
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.Release|x86.Build.0 = Release|Win32
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.ReleaseWithAssert|x64.ActiveCfg = Release|x64
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.ReleaseWithAssert|x64.Build.0 = Release|x64
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.ReleaseWithAssert|x86.ActiveCfg = Release|Win32
+		{A73C9E7D-A60D-4603-8E5A-A4E702AF6597}.ReleaseWithAssert|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
