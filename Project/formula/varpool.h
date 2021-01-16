@@ -10,7 +10,7 @@ namespace edusat {
 		class VariablePool {
 		private:
 			Variable top_var; //Top variable used
-			std::set<Variable> forbidden; //Blacklisted variables
+			std::set<Variable> occupied; //Occupied variables
 			std::map<T, Variable> l2v; //Label to variable
 			std::map<Variable, T> v2l; //Variable to label
 		public:
@@ -20,9 +20,9 @@ namespace edusat {
 		public:
 			T const& label(Variable const&) const;
 			Variable variable(T);
-			void blacklist(Variable);
+			void set_occupied(Variable);
 			template<class _Iter>
-			void blacklist(_Iter const&, _Iter const&);
+			void set_occupied(_Iter const&, _Iter const&);
 			Variable reserve();
 		};
 
@@ -33,7 +33,7 @@ namespace edusat {
 		inline Variable VariablePool<T>::next_var() const
 		{
 			Variable var = top_var + 1;
-			while (forbidden.find(var) != forbidden.end())
+			while (occupied.find(var) != occupied.end())
 				var++; // Increment until not blacklisted
 			return var;
 		}
@@ -57,9 +57,9 @@ namespace edusat {
 		}
 
 		template<typename T>
-		inline void VariablePool<T>::blacklist(Variable variable)
+		inline void VariablePool<T>::set_occupied(Variable variable)
 		{
-			forbidden.insert(variable);
+			occupied.insert(variable);
 		}
 
 		template<typename T>
@@ -70,9 +70,9 @@ namespace edusat {
 
 		template<typename T>
 		template<class _Iter>
-		inline void VariablePool<T>::blacklist(_Iter const& _First, _Iter const& _Last)
+		inline void VariablePool<T>::set_occupied(_Iter const& _First, _Iter const& _Last)
 		{
-			forbidden.insert(_First, _Last);
+			occupied.insert(_First, _Last);
 		}
 	}
 }

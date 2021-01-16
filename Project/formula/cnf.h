@@ -1,23 +1,28 @@
 #pragma once
 
 #include "formula.h"
+#include <ostream>
 
 namespace edusat {
 	namespace formula {
 		class CNF {
 		private:
 			std::vector<Clause> clauses;
+
+			size_t num_variables() const;
 		public:
 			void insert(Clause const&);
 			template<class _Iter>
-			void insert(_Iter _First, _Iter _Last);
+			void insert(_Iter const&);
+
+			friend std::ostream& operator<<(std::ostream&, CNF const&); // DIMACS
 		};
 
 		template<class _Iter>
-		inline void CNF::insert(_Iter _First, _Iter _Last)
+		inline void CNF::insert(_Iter const& _Iter)
 		{
-			for (; _First < _Last; _First++)
-				insert(*_First);
+			for (Clause const& clause : _Iter)
+				insert(clause);
 		}
 	}
 }
