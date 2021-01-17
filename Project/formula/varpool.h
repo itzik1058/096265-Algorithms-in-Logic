@@ -22,7 +22,7 @@ namespace edusat {
 			Variable variable(T);
 			void set_occupied(Variable);
 			template<class _Iter>
-			void set_occupied(_Iter const&, _Iter const&);
+			void set_occupied(_Iter const&);
 			Variable reserve();
 		};
 
@@ -70,9 +70,10 @@ namespace edusat {
 
 		template<typename T>
 		template<class _Iter>
-		inline void VariablePool<T>::set_occupied(_Iter const& _First, _Iter const& _Last)
+		inline void VariablePool<T>::set_occupied(_Iter const& iterable)
 		{
-			occupied.insert(_First, _Last);
+			for (Variable const& v : iterable)
+				set_occupied(v);
 		}
 	}
 }

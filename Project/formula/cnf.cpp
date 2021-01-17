@@ -10,13 +10,18 @@ namespace edusat {
 		{
 			set<Variable> variables;
 			for (Clause const& c : clauses)
-				variables.insert(c.begin(), c.end());
+				for (Variable const& v : c)
+					variables.insert(abs(v));
 			return variables.size();
 		}
 
 		void CNF::insert(Clause const& clause)
 		{
 			clauses.push_back(clause);
+		}
+
+		void CNF::clear() {
+			clauses.clear();
 		}
 
 		ostream& operator<<(ostream& os, CNF const& cnf)
