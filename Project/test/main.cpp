@@ -60,6 +60,11 @@ void test_encoding() {
 	cnf.clear();
 	cnf.insert(card::equals(variables, vpool));
 	cout << cnf << endl;
+	cout << "2x-4y>=-2" << endl;
+	cnf.clear();
+	vector<pair<Variable, int>> coef = { make_pair(vpool.variable("x"), 2), make_pair(vpool.variable("y"), -4) };
+	cnf.insert(card::constraint(coef, vpool, -2));
+	cout << cnf << endl;
 	cout << "test_encoding end" << endl;
 }
 
