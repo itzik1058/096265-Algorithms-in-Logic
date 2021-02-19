@@ -27,6 +27,9 @@
     <ClInclude Include="varpool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="formuladef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cnf.cpp">

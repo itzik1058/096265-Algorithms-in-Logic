@@ -1,6 +1,6 @@
 #pragma once
 
-#include "formula.h"
+#include "formuladef.h"
 #include <set>
 #include <map>
 

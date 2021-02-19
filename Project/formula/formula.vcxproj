@@ -146,6 +146,7 @@
     <ClInclude Include="card.h" />
     <ClInclude Include="cnf.h" />
     <ClInclude Include="formula.h" />
+    <ClInclude Include="formuladef.h" />
     <ClInclude Include="varpool.h" />
   </ItemGroup>
   <ItemGroup>

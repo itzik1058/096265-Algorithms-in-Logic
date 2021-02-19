@@ -44,6 +44,21 @@ void test_cnf() {
 }
 
 
+void test_formula() {
+	cout << "test_formula start" << endl;
+	VariablePool<string> vpool;
+	Formula f(vpool, Operation::And, vpool.variable("1"), vpool.variable("2"));
+	Formula f2 = ~f;
+	Formula f3 = f & ~f;
+	Formula f4(vpool, Operation::Not, vpool.variable("3"));
+	Formula f5 = ~f3 | f4;
+	CNF cnf;
+	cnf.insert(f5.to_cnf());
+	cout << cnf << endl;
+	cout << "test_formula end" << endl;
+}
+
+
 void test_encoding() {
 	cout << "test_encoding start" << endl;
 	VariablePool<string> vpool;
@@ -70,9 +85,11 @@ void test_encoding() {
 
 
 int main() {
-	test_variable_pool();
+	//test_variable_pool();
 	cout << endl;
-	test_cnf();
+	//test_cnf();
+	cout << endl;
+	//test_formula();
 	cout << endl;
 	test_encoding();
 	cout << endl;

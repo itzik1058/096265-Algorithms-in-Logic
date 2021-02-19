@@ -1,6 +1,6 @@
 #pragma once
 
-#include "formula.h"
+#include "formuladef.h"
 #include <ostream>
 
 namespace edusat {
@@ -9,7 +9,7 @@ namespace edusat {
 		private:
 			std::vector<Clause> clauses;
 
-			size_t num_variables() const;
+			size_t top_variable() const;
 		public:
 			void insert(Clause const&);
 			template<class _Iter>

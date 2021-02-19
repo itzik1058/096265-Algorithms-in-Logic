@@ -6,13 +6,13 @@ using namespace std;
 namespace edusat {
 	namespace formula {
 
-		size_t CNF::num_variables() const
+		size_t CNF::top_variable() const
 		{
-			set<Variable> variables;
+			Variable top_var = 0;
 			for (Clause const& c : clauses)
 				for (Variable const& v : c)
-					variables.insert(abs(v));
-			return variables.size();
+					top_var = std::max(top_var, abs(v));
+			return top_var;
 		}
 
 		void CNF::insert(Clause const& clause)
@@ -26,7 +26,7 @@ namespace edusat {
 
 		ostream& operator<<(ostream& os, CNF const& cnf)
 		{
-			os << "p cnf " << cnf.num_variables() << " " << cnf.clauses.size() << endl;
+			os << "p cnf " << cnf.top_variable() << " " << cnf.clauses.size() << endl;
 			for (Clause const& c : cnf.clauses) {
 				for (Variable const& v : c) {
 					os << v << " ";

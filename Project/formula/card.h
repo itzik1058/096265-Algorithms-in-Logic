@@ -11,12 +11,33 @@
 namespace edusat {
 	namespace formula {
 		namespace card {
+			template<typename T>
+			Formula<T> make_bdd(VariablePool<T>& vpool, std::vector<std::pair<Variable, int>> coef, int rhs, int size, int sum, int material_left, std::map<std::pair<int, int>, Formula<T>> memo) {
+				if (sum >= rhs)
+					return Formula<T>(vpool, Operation::True);
+				if (sum + material_left < rhs)
+					return Formula<T>(vpool, Operation::False);
+				std::pair<int, int> key = std::make_pair(size, sum);
+				if (memo.find(key) == memo.end()) {
+					size--;
+					material_left -= coef[size].second;
+					bool sign = coef[size].first > 0;
+					int hi_sum = sign ? sum + coef[size].second : sum;
+					int lo_sum = sign ? sum : sum + coef[size].second;
+					Formula<T> hi_result = make_bdd(vpool, coef, rhs, size, hi_sum, material_left, memo);
+					Formula<T> lo_result = make_bdd(vpool, coef, rhs, size, lo_sum, material_left, memo);
+					Variable v = abs(coef[size].first);
+					Formula<T> selector(vpool, Operation::And, v, v);
+					memo.insert(make_pair(key, formula::ITE(selector, hi_result, lo_result)));
+				}
+				return memo[key];
+			}
+
 			template<class _Container, typename T>
-			std::vector<Clause> constraint(_Container coefficients, VariablePool<T> const& vpool, int rhs,
-				bool check_satisfiability = true) {
+			std::vector<Clause> constraint(_Container coefficients, VariablePool<T>& vpool, int rhs,
+				bool check_satisfiability = false, bool use_bdd = true) {
 				if (coefficients.empty())
 					throw std::exception("No coefficients are present");
-				std::vector<Clause> clauses;
 				std::vector<std::pair<Variable, int>> coef;
 				// Positive coefficients
 				for (std::pair<Variable, int> const& pair : coefficients) {
@@ -30,7 +51,7 @@ namespace edusat {
 						coef.push_back(std::make_pair(pair.first, pair.second));
 				}
 				if (rhs <= 0) // No constraint
-					return clauses;
+					return {};
 				// Trim coefficients
 				int coef_sum = 0;
 				for (auto it = coef.begin(); it != coef.end(); it++)
@@ -48,7 +69,11 @@ namespace edusat {
 				std::sort(coef.begin(), coef.end(),
 					[](const std::pair<Variable, int>& x, const std::pair<Variable, int>& y)
 					{ return x.second < y.second; });
-				return clauses;
+				coef_sum = 0;
+				for (auto it = coef.begin(); it != coef.end(); it++)
+					coef_sum += it->second;
+				std::map<std::pair<int, int>, Formula<T>> memo;
+				return make_bdd(vpool, coef, rhs, coef.size(), 0, coef_sum, memo).to_cnf();
 			}
 
 			template<class _Container, typename T>
@@ -85,8 +110,6 @@ namespace edusat {
 				clauses.insert(clauses.end(), atmost_clauses.begin(), atmost_clauses.end());
 				return clauses;
 			}
-
-			Variable buildBDD();
 		}
 	}
 }
