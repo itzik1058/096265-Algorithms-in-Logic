@@ -1,5 +1,6 @@
 #include "cnf.h"
 #include <set>
+#include <fstream>
 
 using namespace std;
 
@@ -22,6 +23,14 @@ namespace edusat {
 
 		void CNF::clear() {
 			clauses.clear();
+		}
+
+		void CNF::solve()
+		{
+			ofstream cnf("cnf.dimac");
+			cnf << *this;
+			cnf.close();
+			system("edusat.exe cnf.dimac");
 		}
 
 		ostream& operator<<(ostream& os, CNF const& cnf)

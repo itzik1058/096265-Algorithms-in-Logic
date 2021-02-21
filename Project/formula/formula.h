@@ -15,7 +15,7 @@ namespace edusat {
 			Variable root_var;
 			std::map<Variable, std::tuple<Operation, Variable, Variable>> data;
 		public:
-			Formula() : vpool(nullptr) {}
+			Formula() : vpool(nullptr), root_var(0) {}
 
 			Formula(VariablePool<T>& vpool, Operation operation, Variable var1 = 0, Variable var2 = 0) : vpool(&vpool) {
 				root_var = vpool.reserve();
@@ -130,6 +130,16 @@ namespace edusat {
 		template<typename T>
 		Formula<T> FA_carry(Formula<T> const& a, Formula<T> const& b, Formula<T> const& c) {
 			return (b & c) | (a & c) | (a & b);
+		}
+
+		template<typename T>
+		Formula<T> HA_sum(Formula<T> const& a, Formula<T> const& b) {
+			return (a & ~b) | (~a & b);
+		}
+
+		template<typename T>
+		Formula<T> HA_carry(Formula<T> const& a, Formula<T> const& b) {
+			return a & b;
 		}
 	}
 }
