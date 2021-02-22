@@ -63,23 +63,12 @@ void test_encoding() {
 	cout << "test_encoding start" << endl;
 	VariablePool<string> vpool;
 	set<Variable> variables = { vpool.variable("v1"), vpool.variable("v2"), vpool.variable("v3") };
-	cout << "at most 1" << endl;
 	CNF cnf;
-	cnf.insert(card::atmost(variables, vpool));
-	cout << cnf << endl;
-	cout << "at least 1" << endl;
-	cnf.clear();
-	cnf.insert(card::atleast(variables, vpool));
-	cout << cnf << endl;
-	cout << "equals 1" << endl;
-	cnf.clear();
-	cnf.insert(card::equals(variables, vpool));
-	cout << cnf << endl;
 	cout << "2x-4y>=-2" << endl;
-	cnf.clear();
 	vector<pair<Variable, int>> coef = { make_pair(vpool.variable("x"), 2), make_pair(vpool.variable("y"), -4) };
-	cnf.insert(card::constraint(coef, vpool, -2));
+	cnf.insert(card::constraint(coef, vpool, -2, false, true));
 	cout << cnf << endl;
+	cnf.solve();
 	cout << "test_encoding end" << endl;
 }
 

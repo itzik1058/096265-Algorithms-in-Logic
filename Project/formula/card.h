@@ -128,41 +128,6 @@ namespace edusat {
 				std::map<std::pair<int, int>, Formula<T>> memo;
 				return make_bdd(vpool, coef, rhs, coef.size(), 0, coef_sum, memo).to_cnf();
 			}
-
-			template<class _Container, typename T>
-			std::vector<Clause> atleast(_Container const& variables, VariablePool<T> const& vpool, unsigned bound = 1) {
-				std::vector<Clause> clauses;
-				Clause or_clause;
-				for (Variable const& v : variables)
-					or_clause.push_back(v);
-				clauses.push_back(or_clause);
-				return clauses;
-			}
-
-			template<class _Container, typename T>
-			std::vector<Clause> atmost(_Container const& variables, VariablePool<T> const& vpool, unsigned bound = 1) {
-
-				std::vector<Clause> clauses;
-				for (auto&& it = variables.begin(); it != variables.end(); it++) {
-					for (auto&& it2 = std::next(it); it2 != variables.end(); it2++) {
-						Clause clause;
-						clause.push_back(-*it);
-						clause.push_back(-*it2);
-						clauses.push_back(clause);
-					}
-				}
-				return clauses;
-			}
-
-			template<class _Container, typename T>
-			std::vector<Clause> equals(_Container const& variables, VariablePool<T> const& vpool, unsigned bound = 1) {
-				std::vector<Clause> clauses;
-				std::vector<Clause> atleast_clauses = atleast(variables, vpool, bound);
-				std::vector<Clause> atmost_clauses = atmost(variables, vpool, bound);
-				clauses.insert(clauses.end(), atleast_clauses.begin(), atleast_clauses.end());
-				clauses.insert(clauses.end(), atmost_clauses.begin(), atmost_clauses.end());
-				return clauses;
-			}
 		}
 	}
 }

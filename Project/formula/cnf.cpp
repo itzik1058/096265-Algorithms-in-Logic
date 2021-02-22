@@ -30,7 +30,7 @@ namespace edusat {
 			ofstream cnf("cnf.dimac");
 			cnf << *this;
 			cnf.close();
-			system("edusat.exe cnf.dimac");
+			system("edusat.exe -v 1 cnf.dimac");
 		}
 
 		ostream& operator<<(ostream& os, CNF const& cnf)
