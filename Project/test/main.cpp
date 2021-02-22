@@ -66,8 +66,14 @@ void test_encoding() {
 	CNF cnf;
 	cout << "2x-4y>=-2" << endl;
 	vector<pair<Variable, int>> coef = { make_pair(vpool.variable("x"), 2), make_pair(vpool.variable("y"), -4) };
-	cnf.insert(card::constraint(coef, vpool, -2, false, true));
+	cnf.insert(card::constraint(coef, vpool, -2, false, false));
 	cout << cnf << endl;
+	cnf.solve();
+	cout << endl << endl << "adding constraint -x & y" << endl << endl << endl;
+	Variable x = vpool.variable("x");
+	Variable y = vpool.variable("y");
+	cnf.insert({ -x });
+	cnf.insert({ y });
 	cnf.solve();
 	cout << "test_encoding end" << endl;
 }
