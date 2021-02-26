@@ -124,7 +124,7 @@ namespace edusat {
 
 		template<typename T>
 		Formula<T> FA_sum(Formula<T> const& a, Formula<T> const& b, Formula<T> const& c) {
-			return (~a & ~b & ~c) | (~a & b & c) | (a & ~b & c) | (a & b & ~c);
+			return (a & b & c) | (a & ~b & ~c) | (~a & b & ~c) | (~a & ~b & c);
 		}
 
 		template<typename T>

@@ -63,8 +63,10 @@ namespace edusat {
 						buckets[i].push_back(sum);
 						buckets[i + 1].push_back(carry);
 					}
-					result.push_back(buckets[i].back());
-					buckets[i].pop_back();
+					if (buckets[i].size() == 1) {
+						result.push_back(buckets[i].back());
+						buckets[i].pop_back();
+					}
 				}
 				std::vector<Formula<T>> rhs_bits;
 				for (; rhs != 0; rhs >>= 1)

@@ -5,6 +5,8 @@
 #include <assert.h>
 #include <string>
 #include <set>
+#include <fstream>
+#include <sstream>
 #include <iostream>
 
 
@@ -62,7 +64,6 @@ void test_formula() {
 void test_encoding() {
 	cout << "test_encoding start" << endl;
 	VariablePool<string> vpool;
-	set<Variable> variables = { vpool.variable("v1"), vpool.variable("v2"), vpool.variable("v3") };
 	CNF cnf;
 	cout << "2x-4y>=-2" << endl;
 	vector<pair<Variable, int>> coef = { make_pair(vpool.variable("x"), 2), make_pair(vpool.variable("y"), -4) };
@@ -79,14 +80,47 @@ void test_encoding() {
 }
 
 
-int main() {
-	//test_variable_pool();
-	cout << endl;
-	//test_cnf();
-	cout << endl;
-	//test_formula();
-	cout << endl;
-	test_encoding();
+int main(int argc, char** argv) {
+	if (argc < 3) {
+		cout << "run with test.exe use_bdd file_path" << endl;
+		return 0;
+	}
+	bool use_bdd = string(argv[1]) == "true";
+	string path = argv[2];
+	VariablePool<string> vpool;
+	CNF cnf;
+	ifstream in(path);
+	string line;
+	while (getline(in, line)) {
+		if (line[0] == '*')
+			continue;
+		vector<pair<Variable, int>> coef;
+		int rhs = 0;
+		istringstream iss(line);
+		string token;
+		while (iss >> token) {
+			if (token == ";")
+				break;
+			if (token == ">=") {
+				iss >> rhs;
+				cnf.insert(card::constraint(coef, vpool, rhs, false, use_bdd));
+			}
+			else if (token == "=") {
+				iss >> rhs;
+				cnf.insert(card::constraint(coef, vpool, rhs, false, use_bdd));
+				for (auto it = coef.begin(); it != coef.end(); it++)
+					it->second *= -1;
+				cnf.insert(card::constraint(coef, vpool, -rhs, false, use_bdd));
+			}
+			else {
+				int c = stoi(token);
+				string variable;
+				iss >> variable;
+				coef.push_back(make_pair(vpool.variable(variable), c));
+			}
+		}
+	}
+	cnf.solve();
 	cout << endl;
 	return 0;
 }
