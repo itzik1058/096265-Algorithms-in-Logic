@@ -1,4 +1,8 @@
 #include "edusat.h"
+#include "formula.h"
+#include "varpool.h"
+#include "card.h"
+#include "cnf.h"
 
 
 Solver S;
@@ -14,20 +18,20 @@ inline bool verbose_now() {
 
 /******************  Reading the CNF ******************************/
 #pragma region readCNF
-void skipLine(ifstream& in) {
+void skipLine(istream& in) {
 	for (;;) {
 		//if (in.get() == EOF || in.get() == '\0') return;
 		if (in.get() == '\n') { return; }
 	}
 }
 
-static void skipWhitespace(ifstream& in, char&c) {
+static void skipWhitespace(istream& in, char&c) {
 	c = in.get();
 	while ((c >= 9 && c <= 13) || c == 32)
 		c = in.get();
 }
 
-static int parseInt(ifstream& in) {
+static int parseInt(istream& in) {
 	int     val = 0;
 	bool    neg = false;
 	char c;
@@ -40,7 +44,7 @@ static int parseInt(ifstream& in) {
 	return neg ? -val : val;
 }
 
-void Solver::read_cnf(ifstream& in) {
+void Solver::read_cnf(istream& in) {
 	int i;
 	unsigned int vars, clauses, unary = 0;
 	set<Lit> s;
@@ -610,9 +614,52 @@ SolverState Solver::_solve() {
 
 int main(int argc, char** argv){
 	begin_time = cpuTime();
-	parse_options(argc, argv);
+	//parse_options(argc, argv);
 	
-	ifstream in (argv[argc - 1]);
+	//ifstream in (argv[argc - 1]);
+	if (argc < 3) {
+		cout << "run with edusat.exe use_bdd file_path" << endl;
+		return 0;
+	}
+	bool use_bdd = string(argv[1]) == "true";
+	string path = argv[2];
+	edusat::formula::VariablePool<string> vpool;
+	edusat::formula::CNF cnf;
+	ifstream pbo(path);
+	string line;
+	while (getline(pbo, line)) {
+		if (line[0] == '*')
+			continue;
+		vector<pair<edusat::formula::Variable, int>> coef;
+		int rhs = 0;
+		istringstream iss(line);
+		string token;
+		while (iss >> token) {
+			if (token == ";")
+				break;
+			if (token == ">=") {
+				iss >> rhs;
+				cnf.insert(edusat::formula::card::constraint(coef, vpool, rhs, false, use_bdd));
+			}
+			else if (token == "=") {
+				iss >> rhs;
+				cnf.insert(edusat::formula::card::constraint(coef, vpool, rhs, false, use_bdd));
+				for (auto it = coef.begin(); it != coef.end(); it++)
+					it->second *= -1;
+				cnf.insert(edusat::formula::card::constraint(coef, vpool, -rhs, false, use_bdd));
+			}
+			else {
+				int c = stoi(token);
+				string variable;
+				iss >> variable;
+				coef.push_back(make_pair(vpool.variable(variable), c));
+			}
+		}
+	}
+	ofstream tmp("tmp.dimac");
+	tmp << cnf;
+	tmp.close();
+	ifstream in("tmp.dimac");
 	if (!in.good()) Abort("cannot read input file", 1);	
 	cout << "This is edusat" << endl;
 	S.read_cnf(in);		

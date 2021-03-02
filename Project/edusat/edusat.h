@@ -119,7 +119,7 @@ void AssertCheck(bool cond, string func_name, int line, string msg = "") {
 }
 
 
-bool match(ifstream& in, char* str) {
+bool match(istream& in, char* str) {
     for (; *str != '\0'; ++str)
         if (*str != in.get())
             return false;
@@ -279,7 +279,7 @@ public:
 	inline LitState lit_state(Lit l, VarState var_state) {
 		return var_state == VarState::V_UNASSIGNED ? LitState::L_UNASSIGNED : (Neg(l) && var_state == VarState::V_FALSE || !Neg(l) && var_state == VarState::V_TRUE) ? LitState::L_SAT : LitState::L_UNSAT;
 	}
-	void read_cnf(ifstream& in);
+	void read_cnf(istream& in);
 
 	SolverState _solve();
 	void solve();
