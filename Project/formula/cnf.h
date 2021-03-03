@@ -16,6 +16,8 @@ namespace edusat {
 			void insert(_Iter const&);
 			void clear();
 
+			size_t num_clauses() const;
+
 			void solve();
 
 			friend std::ostream& operator<<(std::ostream&, CNF const&); // DIMACS

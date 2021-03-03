@@ -3,6 +3,7 @@
 #include "varpool.h"
 #include "card.h"
 #include "cnf.h"
+#include <ctime>
 
 
 Solver S;
@@ -627,6 +628,8 @@ int main(int argc, char** argv){
 	edusat::formula::CNF cnf;
 	ifstream pbo(path);
 	string line;
+	size_t n_constraints = 0;
+	const clock_t begin_time = clock();
 	while (getline(pbo, line)) {
 		if (line[0] == '*')
 			continue;
@@ -638,10 +641,12 @@ int main(int argc, char** argv){
 			if (token == ";")
 				break;
 			if (token == ">=") {
+				n_constraints++;
 				iss >> rhs;
 				cnf.insert(edusat::formula::card::constraint(coef, vpool, rhs, false, use_bdd));
 			}
 			else if (token == "=") {
+				n_constraints++;
 				iss >> rhs;
 				cnf.insert(edusat::formula::card::constraint(coef, vpool, rhs, false, use_bdd));
 				for (auto it = coef.begin(); it != coef.end(); it++)
@@ -662,6 +667,8 @@ int main(int argc, char** argv){
 	ifstream in("tmp.dimac");
 	if (!in.good()) Abort("cannot read input file", 1);	
 	cout << "This is edusat" << endl;
+	cout << "conversion time: " << float(clock() - begin_time) / CLOCKS_PER_SEC << "s" << endl;
+	cout << "log clause/constraint ratio " << std::log10(static_cast<double>(cnf.num_clauses()) / n_constraints) << endl;
 	S.read_cnf(in);		
 	in.close();
 	S.solve();	

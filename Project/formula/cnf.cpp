@@ -25,6 +25,11 @@ namespace edusat {
 			clauses.clear();
 		}
 
+		size_t CNF::num_clauses() const
+		{
+			return clauses.size();
+		}
+
 		void CNF::solve()
 		{
 			ofstream cnf("cnf.dimac");

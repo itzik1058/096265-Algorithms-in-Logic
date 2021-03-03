@@ -120,7 +120,8 @@ int main(int argc, char** argv) {
 			}
 		}
 	}
-	cnf.solve();
+	ofstream out(path + ".cnf");
+	out << cnf;
 	cout << endl;
 	return 0;
 }

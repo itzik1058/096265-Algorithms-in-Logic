@@ -54,6 +54,8 @@ namespace edusat {
 						Formula<T> carry = FA_carry(buckets[i][0], buckets[i][1], buckets[i][2]);
 						buckets[i].erase(buckets[i].begin(), buckets[i].begin() + 3);
 						buckets[i].push_back(sum);
+						if (buckets.size() <= i + 1)
+							buckets.push_back({});
 						buckets[i + 1].push_back(carry);
 					}
 					if (buckets[i].size() == 2) {
@@ -61,6 +63,8 @@ namespace edusat {
 						Formula<T> carry = HA_carry(buckets[i][0], buckets[i][1]);
 						buckets[i].erase(buckets[i].begin(), buckets[i].begin() + 2);
 						buckets[i].push_back(sum);
+						if (buckets.size() <= i + 1)
+							buckets.push_back({});
 						buckets[i + 1].push_back(carry);
 					}
 					if (buckets[i].size() == 1) {
